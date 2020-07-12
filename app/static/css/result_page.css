@@ -1,0 +1,16 @@
+.table td {
+   text-align: center;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #CAF0F8;
+}
+
+caption {
+  caption-side: top;
+}
+
+.slider-selection {
+	background: #BABABA;
+}
+

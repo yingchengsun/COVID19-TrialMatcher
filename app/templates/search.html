@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="./static/css/search.css">
+{% endblock %}
+{% block content %}
+    <div style="background:transparent !important" class="jumbotron">
+
+        <!-- Material input -->
+<!-- Extended default form grid -->
+        <div class="px-5">
+            <h5>Enter NCTID and change weights for the following features to get recommendations for collaboration opportunities.</h5>
+            <form action="{{ url_for('result_page') }}">
+  <!-- Grid row -->
+  <div class="form-row pt-4">
+    <!-- Default input -->
+    <div class="form-group col-md-2 pr-4">
+{#      <label for="nctid">NCTID</label>#}
+      <input type="text" class="form-control" id="nctid" placeholder="NCTID" name="nctid" required="true">
+    </div>
+      <div class="form-group col-md-2">
+{#      <label for="nctid">NCTID</label>#}
+      <input type="text" class="form-control" id="nctcnt" placeholder="neighbor number" name="nctcnt" required="true">
+    </div>
+
+  </div>
+  <!-- Grid row -->
+
+    <div class="row py-1.5" >
+    <!-- Default input -->
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+             <input class="ex1" id='intervention_name' name="intervention_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="15"/>
+        </div>
+        <label for="intervention_name">Intervention name</label>
+    </div>
+    <!-- Default input -->
+
+    <div class="form-group  col">
+        <div class="mr-4 pt-4">
+             <input class="ex1" id='condition_name' name="condition_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
+        </div>
+        <label for="condition_name">Condition name</label>
+    </div>
+
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+             <input class="ex1" id='study_type' name="study_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
+        </div>
+        <label for="study_type">Study type</label>
+   </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+             <input class="ex1" id='primary_purpose' name="primary_purpose" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
+        </div>
+      <label for="primary_purpose">Primary Purpose</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+             <input class="ex1" id='outcome_measure' name="outcome_measure" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
+        </div>
+      <label for="outcome_measure">Outcome Measure</label>
+    </div>
+    </div>
+
+    <div class="row py-1.5">
+    <!-- Default input -->
+
+    <!-- Default input -->
+    <div class="form-group  col ">
+        <div class="mr-4 pt-4">
+             <input class="ex1" id='intervention_type' name="intervention_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
+        </div>
+      <label for="intervention_type">Intervention type</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='phase' name="phase" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
+        </div>
+        <label for="phase">Phase</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='int_obs' name="int_obs" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="11"/>
+        </div>
+      <label for="int_obs" class="label-extra-small">Intervention/Observation Model</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='location' name="location" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10"/>
+        </div>
+      <label for="location">Location</label>
+   </div>
+    <div class="form-group  col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='allocation' name="allocation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+        </div>
+      <label for="allocation">Allocation</label>
+    </div>
+    </div>
+
+    <div class="row py-1.5 ">
+    <!-- Default input -->
+
+    <!-- Default input -->
+
+    <div class="form-group col pb-3">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='masking' name="masking" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+        </div>
+      <label for="masking" >Masking</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='start_date' name="start_date" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+        </div>
+      <label for="start_date">Start date</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='gender' name="gender" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+        </div>
+      <label for="gender">Gender</label>
+    </div>
+    <div class="form-group  col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='age' name="age" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+        </div>
+        <label for="age">Age</label>
+    </div>
+    <div class="form-group col">
+        <div class="mr-4 pt-4">
+            <input class="ex1" id='healthy_volunteers' name="healthy_volunteers" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+        </div>
+      <label for="healthy_volunteers">Healthy volunteers</label>
+    </div>
+    </div>
+
+  <!-- Grid row -->
+  <button type="submit" class="btn btn-primary btn-md">Search</button>
+</form>
+        </div>
+
+<!-- Extended default form grid -->
+    </div>
+
+{% endblock %}
