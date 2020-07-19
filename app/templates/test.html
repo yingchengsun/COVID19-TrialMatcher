@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+    {#  Note:     expects extending template rendering to define parameters:  #}
+    {# 'hdr_txt', holding styles for leaflet #}
+    {# 'map_div', holding html for area #}
+    {# 'script_txt', holding JS scripts for leaflet #}
+        
+
+    <head>
+    
+        {{ hdr_txt  }}
+        
+    </head>
+    <body>
+
+        <hr/>
+        {{ map_div }}
+        <hr/>
+    
+
+    </body>  
+    {# Note: script_txt MUST follow the body, so that div ids are defined to be referenced in the scripts #}
+    <script>
+        {{ script_txt }}
+    </script>
+</html>

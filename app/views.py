@@ -3,19 +3,21 @@ Created by Jiaqi Tang
 6/17/2020
 '''
 from app import app
-from flask import Flask,render_template,request,session
+from flask import Flask,render_template,request,session, url_for
 from app.lib import recommendation
 from app.lib import location_plot
-import folium
-from folium.plugins import HeatMap
-from folium.plugins import MarkerCluster
 import zipcodes
 
+from app.lib.folium import folium
+from app.lib.folium import map
+from app.lib.folium.plugins import HeatMap
+from app.lib.folium.plugins import MarkerCluster
+from flask import Markup
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
-@app.route('/collaboration')
+@app.route('/')
 def index():
     return render_template('index.html')
 
@@ -56,43 +58,69 @@ def result_page():
     score_list=[i[1] for i in result]
     title_list=[i[2] for i in result]
 
-
+    
     marker_loc,heat_loc=location_plot.extract_information(id_list)
     target_marker_loc,target_heat_loc=location_plot.extract_information([nctid])
-    heat_map=folium.Map(location=[39.8283, -98.5795], zoom_start=3)
-    heat_map.add_child(HeatMap(heat_loc, radius=15))
-    heat_map.add_child(HeatMap(target_heat_loc, radius=15))
-    heat_map.save('app/templates/heat_map.html')
+    
 
-    marker_map = folium.Map(location=[39.8283, -98.5795], zoom_start=3)
+    marker_map = folium.Map(location=[39.8283, -98.5795], zoom_start=3,  width='30%', height='30%', left = '20%')
     #marker_cluster = MarkerCluster().add_to(marker_map)
 
     for i in marker_loc:
-        folium.Marker(
+        map.Marker(
             location=[i[1], i[2]],
             popup=i[0] + "<br><br>" + i[3],
             # tooltip = "nct_id"
-        ).add_to(marker_map)
+        ).add_to( marker_map )
     for i in target_marker_loc:
-        folium.Marker(
+        map.Marker(
             location=[i[1],i[2]],
             popup=i[0] + "<br><br>" + i[3],
-            icon=folium.Icon(color='red')
-        ).add_to(marker_map)
-    marker_map.save('app/templates/marker_map.html')
+            icon=map.Icon(color='red')
+        ).add_to( marker_map )
+   # first, force map to render as HTML, for us to dissect
+    _ = marker_map._repr_html_()
+
+    # get definition of map in body
+    marker_map_div = Markup(marker_map.get_root().html.render())
+
+    # html to be included in header
+    marker_map_hdr = Markup(marker_map.get_root().header.render())
+
+    # html to be included in <script>
+    marker_map_script = Markup(marker_map.get_root().script.render())
+
+    
+    heat_map=folium.Map(location=[39.8283, -98.5795], zoom_start=3,  width='30%', height='30%',left = '21%')
+    heat_map.add_child(HeatMap(heat_loc, radius=15))
+    heat_map.add_child(HeatMap(target_heat_loc, radius=15))
+
+    #heat_map.save('app/static/heat_map.html')
+    _ = heat_map._repr_html_()
+
+    # get definition of map in body
+    heat_map_div = Markup(heat_map.get_root().html.render())
+
+    # html to be included in header
+    heat_map_hdr = Markup(heat_map.get_root().header.render())
+
+    # html to be included in <script>
+    heat_map_script = Markup(heat_map.get_root().script.render())
+
 
     print('Success!')
     return render_template('result_page.html',cur_id=nctid,id_list=id_list,\
-                           score_list=score_list,title_list=title_list,step_score_highest=step_score_highest)
+                           score_list=score_list,title_list=title_list,step_score_highest=step_score_highest, 
+                           marker_map_div=marker_map_div, marker_map_hdr=marker_map_hdr, marker_map_script=marker_map_script, 
+                           heat_map_div=heat_map_div, heat_map_hdr=heat_map_hdr, heat_map_script=heat_map_script)
+   
 
-
-
-@app.route('/heatmap')
-def heatmap():
-    return render_template('heat_map.html')
-@app.route('/markermap')
-def markermap():
-    return render_template('marker_map.html')
+# @app.route('/heatmap')
+# def heatmap():
+#     return render_template('heat_map.html')
+# @app.route('/markermap')
+# def markermap():
+#     return render_template('marker_map.html')
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'),404

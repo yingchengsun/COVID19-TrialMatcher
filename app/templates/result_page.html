@@ -1,209 +1,219 @@
-{% extends "base.html" %}
-{% block head %}
-    <link rel="stylesheet" href="./static/css/result_page.css">
-{% endblock %}
-{% block content %}
-    <div style="background:transparent !important" class="jumbotron" style="padding:1rem 1.5rem;">
+    {% extends "base.html" %}
+    {% block head %}
 
-        <!-- Material input -->
-<!-- Extended default form grid -->
-        <div class="px-5">
-            <p>Enter NCTID and change weights for the following features to get recommendations for collaboration opportunities.</p>
-            <form action="{{ url_for('result_page') }}">
-  <!-- Grid row -->
-  <div class="form-row pt-2">
-    <!-- Default input -->
-    <div class="form-group col-md-5 text-center" >
-{#      <label for="nctid">NCTID</label>#}
-      <input type="text" class="form-control" id="nctid" placeholder="NCTID" name="nctid" required="true">
-    </div>
-      <div class="form-group col-md-5 text-center">
-{#      <label for="nctid">NCTID</label>#}
-      <input type="text" class="form-control" id="nctcnt" placeholder="neighbor number" name="nctcnt" required="true">
-    </div>
-      <div class="form-group col-md-1 text-center">
-              <button type="submit" class="btn btn-primary btn-md" >Search</button>
+        <link rel="stylesheet" href="./static/css/result_page.css">
+    {% endblock %}
+    {% block content %}
+
+        <head>
+        
+            {{ marker_map_hdr  }}
+            {{ heat_map_hdr  }}
+        </head>
+
+
+    <div style="background:transparent !important" class="jumbotron" style="padding:1rem 1.5rem;">
+            <!-- Material input -->
+    <!-- Extended default form grid -->
+            <div class="px-5">
+                <p>Enter NCTID and change weights for the following features to get recommendations for collaboration opportunities.</p>
+                <form action="{{ url_for('result_page') }}">
+      <!-- Grid row -->
+      <div class="form-row pt-2">
+        <!-- Default input -->
+        <div class="form-group col-md-5 text-center" >
+    {#      <label for="nctid">NCTID</label>#}
+          <input type="text" class="form-control" id="nctid" placeholder="NCTID" name="nctid" required="true">
+        </div>
+          <div class="form-group col-md-5 text-center">
+    {#      <label for="nctid">NCTID</label>#}
+          <input type="text" class="form-control" id="nctcnt" placeholder="neighbor number" name="nctcnt" required="true">
+        </div>
+          <div class="form-group col-md-1 text-center">
+                  <button type="submit" class="btn btn-primary btn-md" >Search</button>
+
+          </div>
 
       </div>
 
-  </div>
-  <!-- Grid row -->
+      <!-- Grid row -->
 
-    <div class="collapseContainer field pb-4" style="border-radius:5px;">
-                  <div class="collapseHeader ui fluid" style="background:#cdcdcd;border-radius:6px;padding:10px;"><span class="collapseSpan">Feature Weight Change (Click to Open)</span></div>
-<div class="collapseContent" style="display:none;">
+        <div class="collapseContainer field pb-4" style="border-radius:5px;">
+                      <div class="collapseHeader ui fluid" style="background:#cdcdcd;border-radius:6px;padding:10px;"><span class="collapseSpan">Feature Weight Change (Click to Open)</span></div>
+    <div class="collapseContent" style="display:none;">
 
-    <div class="row py-3" >
-    <!-- Default input -->
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-             <input  class="ex1" id='intervention_name' name="intervention_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="15"/>
+        <div class="row py-3" >
+        <!-- Default input -->
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                 <input  class="ex1" id='intervention_name' name="intervention_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="15"/>
+            </div>
+            <label for="intervention_name">Intervention name</label>
         </div>
-        <label for="intervention_name">Intervention name</label>
-    </div>
-    <!-- Default input -->
+        <!-- Default input -->
 
-    <div class="form-group  col">
-        <div class="mr-4 pt-4">
-             <input class="ex1" id='condition_name' name="condition_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
-        </div>
-        <label for="condition_name">Condition name</label>
-    </div>
-
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-             <input class="ex1" id='study_type' name="study_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
-        </div>
-        <label for="study_type">Study type</label>
-   </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-             <input class="ex1" id='primary_purpose' name="primary_purpose" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
-        </div>
-      <label for="primary_purpose">Primary Purpose</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-             <input class="ex1" id='outcome_measure' name="outcome_measure" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
-        </div>
-      <label for="outcome_measure">Outcome Measure</label>
-    </div>
-    </div>
-
-    <div class="row py-3">
-    <!-- Default input -->
-
-    <!-- Default input -->
-    <div class="form-group  col ">
-        <div class="mr-4 pt-4">
-             <input class="ex1" id='intervention_type' name="intervention_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
-        </div>
-      <label for="intervention_type">Intervention type</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='phase' name="phase" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="11"/>
-        </div>
-        <label for="phase">Phase</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='int_obs' name="int_obs" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10"/>
-        </div>
-      <label for="int_obs" class="label-extra-small">Intervention/Observation Model</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='location' name="location" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-      <label for="location">Location</label>
-   </div>
-    <div class="form-group  col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='allocation' name="allocation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-      <label for="allocation">Allocation</label>
-    </div>
-    </div>
-
-    <div class="row py-3 ">
-    <!-- Default input -->
-
-    <!-- Default input -->
-
-    <div class="form-group col pb-3">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='masking' name="masking" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-      <label for="masking" >Masking</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='start_date' name="start_date" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-      <label for="start_date">Start date</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='gender' name="gender" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-      <label for="gender">Gender</label>
-    </div>
-    <div class="form-group  col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='age' name="age" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-        <label for="age">Age</label>
-    </div>
-    <div class="form-group col">
-        <div class="mr-4 pt-4">
-            <input class="ex1" id='healthy_volunteers' name="healthy_volunteers" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-        </div>
-      <label for="healthy_volunteers">Healthy volunteers</label>
-    </div>
-    </div>
-
-    </div>
-    </div>
-
-</form>
+        <div class="form-group  col">
+            <div class="mr-4 pt-4">
+                 <input class="ex1" id='condition_name' name="condition_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
+            </div>
+            <label for="condition_name">Condition name</label>
         </div>
 
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                 <input class="ex1" id='study_type' name="study_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
+            </div>
+            <label for="study_type">Study type</label>
+       </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                 <input class="ex1" id='primary_purpose' name="primary_purpose" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
+            </div>
+          <label for="primary_purpose">Primary Purpose</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                 <input class="ex1" id='outcome_measure' name="outcome_measure" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
+            </div>
+          <label for="outcome_measure">Outcome Measure</label>
+        </div>
+        </div>
 
-    <div id='myDiv' class="container-sm text-center"><!-- Plotly chart will be drawn inside this DIV --></div>
+        <div class="row py-3">
+        <!-- Default input -->
 
-    <div class="row">
-    <div class="col-md-6 text-center" > <h3>Location Map</h3></div>
-    <div class="col-md-6 text-center" ><h3>Heat Map</h3></div>
+        <!-- Default input -->
+        <div class="form-group  col ">
+            <div class="mr-4 pt-4">
+                 <input class="ex1" id='intervention_type' name="intervention_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
+            </div>
+          <label for="intervention_type">Intervention type</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='phase' name="phase" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="11"/>
+            </div>
+            <label for="phase">Phase</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='int_obs' name="int_obs" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10"/>
+            </div>
+          <label for="int_obs" class="label-extra-small">Intervention/Observation Model</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='location' name="location" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+          <label for="location">Location</label>
+       </div>
+        <div class="form-group  col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='allocation' name="allocation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+          <label for="allocation">Allocation</label>
+        </div>
+        </div>
+
+        <div class="row py-3 ">
+        <!-- Default input -->
+
+        <!-- Default input -->
+
+        <div class="form-group col pb-3">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='masking' name="masking" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+          <label for="masking" >Masking</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='start_date' name="start_date" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+          <label for="start_date">Start date</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='gender' name="gender" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+          <label for="gender">Gender</label>
+        </div>
+        <div class="form-group  col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='age' name="age" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+            <label for="age">Age</label>
+        </div>
+        <div class="form-group col">
+            <div class="mr-4 pt-4">
+                <input class="ex1" id='healthy_volunteers' name="healthy_volunteers" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
+            </div>
+          <label for="healthy_volunteers">Healthy volunteers</label>
+        </div>
+        </div>
+
+        </div>
+        </div>
+
+    </form>
+            </div>
 
 
-    </div>
+        <div id='myDiv' class="container-sm text-center"><!-- Plotly chart will be drawn inside this DIV --></div>
 
-    <div class="row">
-    <div class="col-md-6 text-center" style ="position :right"> <iframe class="map", src="/markermap" width="400" height="400"></iframe></div>
-    <div class="col-md-6 text-center" style="position:left"> <iframe class="map", src="/heatmap" width="400" height="400"></iframe></div>
+        <div class="row">
+        <div class="col-md-4 text-center" style="float:left;left:22%" > <h4>Location Map</h4></div>
+        <div class="col-md-4 text-center" style="float:left;left:12%" ><h4>Heat Map</h4></div>
 
 
-    </div>
+        </div>
 
-    <div class="container-xl pt-5">
-    <p>Current nctid: <a href="https://clinicaltrials.gov/ct2/show/{{ cur_id }}" class="alert-link">{{ cur_id }}</a></p>
-        <div class="table-responsive">
-        <table class="table table-striped table-hover table-lg ">
-        <caption><h3>Detailed table</h3></caption>
-    <thead>
+        
+
+       
+        {{ marker_map_div }}
+        {{ heat_map_div }}
+
+        <div class="container-xl pt-5" >
+            
+            <div class="table-responsive" >
+            <table class="table table-striped table-hover table-lg ">
+            <caption ></br></br><h4>Detailed Table</h4></caption>
+        <thead>
+            <tr>
+            <th class="text-center">{{ step_score_highest[0][0] }}</th>
+                {% for i in step_score_highest[0][1:] %}
+                    <th class="text-center" scope="col"><a href="https://clinicaltrials.gov/ct2/show/{{ i }}" class="alert-link">{{ i }}</a></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for i in step_score_highest[1:] %}
         <tr>
-        <th class="text-center">{{ step_score_highest[0][0] }}</th>
-            {% for i in step_score_highest[0][1:] %}
-                <th class="text-center" scope="col"><a href="https://clinicaltrials.gov/ct2/show/{{ i }}" class="alert-link">{{ i }}</a></th>
+            <th scope="row">{{ i[0] }}</th>
+            {% for j in i[1:] %}
+                <td>{{ j }}</td>
             {% endfor %}
         </tr>
-    </thead>
-    <tbody>
-    {% for i in step_score_highest[1:] %}
-    <tr>
-        <th scope="row">{{ i[0] }}</th>
-        {% for j in i[1:] %}
-            <td>{{ j }}</td>
         {% endfor %}
-    </tr>
-    {% endfor %}
-    </tbody>
+        </tbody>
 
-    </table>
-    </div>
-    </div>
-    </div>
+        </table>
+        </div>
+        </div>
+        </div>
 
+    <script type="text/javascript"> {{ marker_map_script }}</script>
+    <script type="text/javascript"> {{ heat_map_script }}</script>
+        <script>
 
-    <script>
-    var xi={{ id_list|tojson}};
-    var yi={{ score_list|tojson }};
-    var titles={{ title_list|tojson }}
-    var myPlot= document.getElementById('myDiv'),
-        d3=Plotly.d3,
-        data=[{x: xi, y: yi, type: 'bar', text: titles}],
-        layout={title: 'Collaboration Opportunities Recommendation for {{ cur_id }}'};
-    Plotly.newPlot('myDiv', data,layout);
-    </script>
-{% endblock %}
+        var xi={{ id_list|tojson}};
+        var yi={{ score_list|tojson }};
+        var titles={{ title_list|tojson }}
+        var myPlot= document.getElementById('myDiv'),
+            d3=Plotly.d3,
+            data=[{x: xi, y: yi, type: 'bar', text: titles}],
+            layout={title: 'Collaboration Opportunities Recommendation for <a href="https://clinicaltrials.gov/ct2/show/{{ cur_id }}" class="alert-link">{{ cur_id }}'};
+        Plotly.newPlot('myDiv', data,layout);
+        </script>
+    {% endblock %}
