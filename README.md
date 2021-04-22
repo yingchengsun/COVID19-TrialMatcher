@@ -1,5 +1,5 @@
-# COVID-Trial-Collaboration
-A website seeking COVID-19 Trials Collaboration Opportunities 
+# COVID-Trial-Recommendation
+A website recommend similar COVID-19 Trials given an example one
 
 # Install and deploy
 **Enviroment**: Python 3, Flask, Folium  
@@ -10,5 +10,5 @@ A website seeking COVID-19 Trials Collaboration Opportunities
 0.1
 
 # Authors
-Jiaqi Tang (jt3169@cumc.columbia.edu), Yingcheng Sun, Chunhua Weng 
+Jiaqi Tang (jt3169@cumc.columbia.edu), Yingcheng Sun, Alex Butler, Chunhua Weng 
 
