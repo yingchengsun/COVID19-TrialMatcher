@@ -1,4 +1,4 @@
-# COVID-Trial-Recommendation
+# COVID19-TrialMatcher
 A website recommend similar COVID-19 Trials given an example one
 
 # Install and deploy
