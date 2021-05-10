@@ -1,5 +1,6 @@
 # COVID19-TrialMatcher
-An Interactive Interface for the Search of Clinical Trials Matching the Target Trial
+An Interactive Interface for the Search of Clinical Trials Matching the Target Trial    
+visit online: http://apex.dbmi.columbia.edu/trialmatcher
     
 # Install and deploy
 **Enviroment**: Python 3, Flask, Folium  
@@ -10,10 +11,10 @@ An Interactive Interface for the Search of Clinical Trials Matching the Target T
 **Execute**: python3 run.py browse: http://127.0.0.1:5000/  
   
 **Index Page**:  
-<img src="/pictures/index.png" alt="drawing" width="600"/>
+<img src="/pictures/index.png" alt="drawing" width="500"/>
   
-**Index Page**:  
-<img src="/pictures/result.png" alt="drawing" width="600"/>  
+**Result Page**:  
+<img src="/pictures/result.png" alt="drawing" width="500"/>  
 
 # Versioning
 2.0
