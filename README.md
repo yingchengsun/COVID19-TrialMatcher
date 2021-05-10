@@ -11,10 +11,12 @@ Visit online: http://apex.dbmi.columbia.edu/trialmatcher
 **Execute**: python3 run.py browse: http://127.0.0.1:5000/  
   
 **Index Page**:  
-<img src="/pictures/index.png" alt="drawing" width="500"/>
+  
+<img src="/pictures/index.png" alt="drawing" width="600"/>
   
 **Result Page**:  
-<img src="/pictures/result.png" alt="drawing" width="500"/>  
+  
+<img src="/pictures/result.png" alt="drawing" width="600"/>  
 
 # Versioning
 2.0
