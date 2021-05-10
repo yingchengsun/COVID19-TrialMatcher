@@ -3,20 +3,22 @@ import csv
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
 from collections import defaultdict
-from .overlap import *
+import numpy as np
+
 
 root='app/resources/'
-aact_trial=pd.read_csv(root+'aact_trial_web.csv')
-aact_trial_info=pd.read_csv(root+'aact_trial_info.csv')
 
-with open(root+'outcome_measures_embedding.pickle','rb') as handle:
-    outcome_measure_dict=pickle.load(handle)
+aact_trial_info=pd.read_csv(root+'matrix/all_info_1007_COVID_trials.csv')
+# aact_trial = aact_trial_info
+with open(root+'matrix/precomputed_weights.pkl','rb') as handle:
+    precomputed_scores=pickle.load(handle)
+
+with open(root+'matrix/nct_id.pkl','rb') as handle:
+    nct_id=pickle.load(handle)
 
 
-def find_n_highest_score(nct,n,intervention_names_weight, condition_names_weight, study_type_weight,\
-                        primary_purpose_weight, outcome_measure_weight, intervention_type_weight,\
-                        phase_weight,int_obs_weight,location_weight,allocation_weight,masking_weight,\
-                        start_date_weight,gender_weight,age_weight,healthy_volunteers_weight):
+
+def find_n_highest_score(nct,n,feature_weights,features, eligibility_criteria_rules):
     '''find the n highest score and nct pairs
     
     Args:
@@ -27,82 +29,51 @@ def find_n_highest_score(nct,n,intervention_names_weight, condition_names_weight
         step_score_highest: overlap score for each feature of the selected nctids which have the highest similarity score
     
     '''
-    total_weight = intervention_names_weight + condition_names_weight + study_type_weight + \
-                   primary_purpose_weight + outcome_measure_weight + intervention_type_weight + phase_weight + int_obs_weight + location_weight + \
-                   allocation_weight + masking_weight + start_date_weight + gender_weight + age_weight + healthy_volunteers_weight
-    score_list=[]
-    step_score_list=[]
-    max_zipcode_length=find_max_zipcode_overlap_length(nct)
-    max_condition_length=find_max_condition_names_overlap_length(nct)
-    max_intervention_length=find_max_intervention_names_overlap_length(nct)
-    max_intervention_type_length=find_max_intervention_type_overlap_length(nct)
     
-    for i,title in zip(aact_trial.nct_id,aact_trial.brief_title):
-        if i!=nct:
-            if max_intervention_length==0:
-                intervention_names_score=0
-            else:
-                intervention_names_score=compute_normalized_intervention_names_overlap_between_pairs(nct,i,max_intervention_length)
-                
-            if max_intervention_type_length==0:
-                intervention_type_score=0
-            else:
-                intervention_type_score=compute_normalized_intervention_type_overlap_between_pairs(nct,i,max_intervention_type_length)
-            
-            if max_condition_length==0:
-                condition_names_score=0
-            else:
-                condition_names_score=compute_normalized_condition_names_overlap_between_pairs(nct,i,max_condition_length)
-                
-            
-            if max_zipcode_length==0:
-                location_score=0
-            else:
-                location_score=compute_normalized_zip_overlap_between_pairs(nct,i,max_zipcode_length)
-                            
-            study_type_score=compute_single_feature_standardized_similarity('study_type',nct,i)
-            primary_purpose_score=compute_single_feature_standardized_similarity('primary_purpose',nct,i)
-            phase_score=compute_single_feature_standardized_similarity('phase',nct,i)
-            int_obs_score=compute_single_feature_standardized_similarity('int_and_obs_model',nct,i)
-            allocation_score=compute_single_feature_standardized_similarity('allocation',nct,i)
-            masking_score=compute_single_feature_standardized_similarity('masking',nct,i)
-            start_date_score=compute_single_feature_standardized_similarity('start_date',nct,i) 
-            gender_score=compute_single_feature_standardized_similarity('gender',nct,i)
-            age_score=compute_single_feature_standardized_similarity('minimum_age',nct,i)
-            healthy_volunteers_score=compute_single_feature_standardized_similarity('healthy_volunteers',nct,i)
-            outcome_measure_score=compute_outcome_measure_standardized_similarity(nct,i,outcome_measure_dict)
-            
-            
-            total_score=(intervention_names_score*intervention_names_weight + \
-                         condition_names_score*condition_names_weight + \
-                         study_type_score * study_type_weight + \
-                         primary_purpose_score * primary_purpose_weight + \
-                         outcome_measure_score * outcome_measure_weight + \
-                         intervention_type_score*intervention_type_weight+\
-                         phase_score * phase_weight + \
-                         int_obs_score * int_obs_weight + \
-                         location_score*location_weight   + \
-                         allocation_score * allocation_weight + \
-                         masking_score * masking_weight + \
-                         start_date_score * start_date_weight + \
-                         gender_score * gender_weight + \
-                         age_score * age_weight + \
-                         healthy_volunteers_score * healthy_volunteers_weight) / total_weight
-            
-            location_overlap=find_zip_overlap_number(nct,i)
-            condition_names_overlap=find_condition_names_overlap_number(nct,i)
-            intervention_names_overlap=find_intervention_names_overlap_number(nct,i)
-            intervention_type_overlap=find_intervention_type_overlap_number(nct,i)
-            step_score_list.append([i,intervention_names_overlap,condition_names_overlap,\
-                                study_type_score,primary_purpose_score,outcome_measure_score,\
-                                intervention_type_overlap,phase_score,int_obs_score,location_overlap, \
-                                 allocation_score,masking_score,start_date_score,  \
-                                 gender_score ,age_score,healthy_volunteers_score])
-            
-            
-            score_list.append([i,total_score,title])
+    features=features
+    eligibility_criteria_rules=eligibility_criteria_rules
+    target_trial_idx  = nct_id.index(nct)
+
+    size=len(precomputed_scores['intervention_name'])
+    total_score=np.zeros((1, size))
+    EC_scores = np.zeros((1, size))
+
+
+    EC_weight = 0
+    for feature in eligibility_criteria_rules:
+        EC_scores += precomputed_scores[feature][target_trial_idx] * feature_weights[feature]
+        EC_weight += feature_weights[feature]
+        
+    if EC_weight == 0:
+        precomputed_scores['eligibility_criteria'][target_trial_idx] =0
+    else:
+        precomputed_scores['eligibility_criteria'][target_trial_idx] = EC_scores/EC_weight*1.0
+
+    total_weight = 0
+    for feature in features:
+        total_score += precomputed_scores[feature][target_trial_idx] * feature_weights[feature]
+        total_weight += feature_weights[feature]
+
+    if total_weight == 0:
+        total_score =np.zeros((1, size))[0]
+    else:
+        total_score = (total_score/total_weight*1.0)[0]
+
+    #score_list = total_score/total_weight*1.0
+    score_list =zip(aact_trial_info.nct_id,total_score, aact_trial_info.brief_title)
+
     sorted_score_list=sorted(score_list,key=lambda x:x[1],reverse=True)
-    highest_score=sorted_score_list[:n]
+
+    highest_score=[]
+    count=0
+    for item in sorted_score_list:
+        if item[0]!=nct:
+            highest_score.append(item)
+            count+=1
+            if count==n:
+                break
+
+    #highest_score=sorted_score_list_new[:n]
 
     table_features=['nct_id', 'intervention_names', 'condition_names', \
                            'study_type', 'primary_purpose', 'outcome_measure', \

@@ -1,218 +1,325 @@
-    {% extends "base.html" %}
-    {% block head %}
 
-        <link rel="stylesheet" href="./static/css/result_page.css">
-    {% endblock %}
-    {% block content %}
+{% extends "base.html" %}
 
-        <head>
-        
-            {{ marker_map_hdr  }}
-            {{ heat_map_hdr  }}
-        </head>
+{% block head %}
+<link rel="stylesheet" href="./static/css/result_page.css">
+{% endblock %}
+{% block content %}
+<head>
+
+    {{ marker_map_hdr  }}
+    {{ heat_map_hdr  }}
+</head>
+
+  <style type="text/css">
+    .div_block  
+    {  
+      text-align:center;  
+      margin:0 auto;  
+      padding:0;  
+      vertical-align: middle;
+      clear:both;  
+      display:inline-block;  
+      _display:inline;  
+      *display:inline;
+    }  
+  </style>
+
+<!-- Material input -->
+<!-- Extended default form grid -->
+   
+   
 
 
-            <!-- Material input -->
-    <!-- Extended default form grid -->
-            <div class="px-5">
-                <p>Enter NCTID and change weights for the following features to get recommendations for collaboration opportunities.</p>
-                <form action="{{ url_for('result_page') }}">
-      <!-- Grid row -->
-      <div class="form-row pt-2">
+    <form action="{{ url_for('result_page') }}">
+
+      
+     
+
+      <div  style='text-align:center;'>
+
+      <div  id="logo_div"  style='width:50px; float:left;'>
+        <a href='/search_form'><img src="/static/img/logo.png" width="30" alt="Italian Trulli"></a>
+      </div>
+      <div  style='width:300px; font-size:20px; float:left; vertical-align: middle;'>
+         <a href='/search_form'>COVID-19 TRIAL MATCHER</a>
+      </div>
         <!-- Default input -->
-        <div class="form-group col-md-5 text-center" >
-    {#      <label for="nctid">NCTID</label>#}
-          <input type="text" class="form-control" id="nctid" placeholder="NCTID" name="nctid" required="true">
+        <div  style=' display:inline-block; margin-right:10px; width:20%;  '>
+            {#      <label for="nctid">NCTID</label>#}
+            <input type="text" class="form-control" id="nctid" placeholder="NCTID" value={{ cur_id }} name="nctid" required="true">
         </div>
-          <div class="form-group col-md-5 text-center">
-    {#      <label for="nctid">NCTID</label>#}
-          <input type="text" class="form-control" id="nctcnt" placeholder="neighbor number" name="nctcnt" required="true">
+        <div class="div_block" style='display:inline-block; margin-right:10px; width:10%; '>
+            {#      <label for="nctid">nctcnt</label>#}
+            <input type="text" class="form-control" id="nctcnt" placeholder="Number of Results" value={{ nctcnt }} name="nctcnt" required="true">
         </div>
-          <div class="form-group col-md-1 text-center">
-                  <button type="submit" class="btn btn-primary btn-md" >Search</button>
-
-          </div>
+        <div class="div_block"  style=' display:inline-block; margin-right:300px;width:110px; '>
+          <button type="submit" class="btn btn-primary btn-md" style='align:center; font-size:16px; width:120px;height:35px' >Search</button>
 
       </div>
 
-      <!-- Grid row -->
+  </div>
+  <!-- Grid row -->
 
-        <div class="collapseContainer field pb-4" style="border-radius:5px;">
-                      <div class="collapseHeader ui fluid" style="background:#cdcdcd;border-radius:6px;padding:10px;"><span class="collapseSpan">Feature Weight Change (Click to Open)</span></div>
-    <div class="collapseContent" style="display:none;">
 
-        <div class="row py-3" >
-        <!-- Default input -->
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                 <input  class="ex1" id='intervention_name' name="intervention_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="15"/>
-            </div>
-            <label for="intervention_name">Intervention name</label>
-        </div>
-        <!-- Default input -->
+ <div class="collapseHeader ui fluid" style="background:#ededed; text-align: center;border-radius:6px; padding:10px;  margin:0 auto; margin-top: 30px;"><span class="collapseSpan", style='text-align: center'> Similarity Feature Configuration (Click to Open)</span></div>
 
-        <div class="form-group  col">
-            <div class="mr-4 pt-4">
-                 <input class="ex1" id='condition_name' name="condition_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
-            </div>
-            <label for="condition_name">Condition name</label>
-        </div>
+      
+      <div class="collapseContainer field pb-4" style=" display:none;  margin:0 auto; margin-top: 20px;border: 1px solid #ededed;">
+        <div class="row py-1.5"  style=" margin:10px;margin-top:20px ">
+          <!-- Default input -->
+          <div class="form-group col" >
+            <div class="mr-4 pt-4" >
+             <input class="ex1" id='intervention_name' name="intervention_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['intervention_name']}}"/>
+           </div>
+           <label for="intervention_name">Intervention name</label>
+         </div>
+         <!-- Default input -->
 
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                 <input class="ex1" id='study_type' name="study_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
-            </div>
-            <label for="study_type">Study type</label>
+         <div class="form-group  col">
+          <div class="mr-4 pt-4">
+           <input class="ex1" id='condition_name' name="condition_name" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['condition_name']}}"/>
+         </div>
+         <label for="condition_name">Condition name</label>
        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                 <input class="ex1" id='primary_purpose' name="primary_purpose" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
-            </div>
-          <label for="primary_purpose">Primary Purpose</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                 <input class="ex1" id='outcome_measure' name="outcome_measure" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="13"/>
-            </div>
-          <label for="outcome_measure">Outcome Measure</label>
-        </div>
-        </div>
 
-        <div class="row py-3">
-        <!-- Default input -->
-
-        <!-- Default input -->
-        <div class="form-group  col ">
-            <div class="mr-4 pt-4">
-                 <input class="ex1" id='intervention_type' name="intervention_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="12"/>
-            </div>
-          <label for="intervention_type">Intervention type</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='phase' name="phase" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="11"/>
-            </div>
-            <label for="phase">Phase</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='int_obs' name="int_obs" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10"/>
-            </div>
-          <label for="int_obs" class="label-extra-small">Intervention/Observation Model</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='location' name="location" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-          <label for="location">Location</label>
+       <div class="form-group col">
+        <div class="mr-4 pt-4">
+         <input class="ex1" id='study_type' name="study_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['study_type']}}"/>
        </div>
-        <div class="form-group  col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='allocation' name="allocation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-          <label for="allocation">Allocation</label>
-        </div>
-        </div>
+       <label for="study_type">Study type</label>
+     </div>
 
-        <div class="row py-3 ">
-        <!-- Default input -->
+     <div class="form-group col">
+      <div class="mr-4 pt-4">
+       <input class="ex1" id='primary_purpose' name="primary_purpose" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['primary_purpose']}}"/>
+     </div>
+     <label for="primary_purpose">Primary Purpose</label>
+   </div>
 
-        <!-- Default input -->
+   <div class="form-group col">
+    <div class="mr-4 pt-4">
+     <input class="ex1" id='outcome_measure' name="outcome_measure" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['outcome_measure']}}"/>
+   </div>
+   <label for="outcome_measure">Outcome Measure</label>
+ </div>
 
-        <div class="form-group col pb-3">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='masking' name="masking" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-          <label for="masking" >Masking</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='start_date' name="start_date" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-          <label for="start_date">Start date</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='gender' name="gender" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-          <label for="gender">Gender</label>
-        </div>
-        <div class="form-group  col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='age' name="age" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-            <label for="age">Age</label>
-        </div>
-        <div class="form-group col">
-            <div class="mr-4 pt-4">
-                <input class="ex1" id='healthy_volunteers' name="healthy_volunteers" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="1"/>
-            </div>
-          <label for="healthy_volunteers">Healthy volunteers</label>
-        </div>
-        </div>
+</div>
 
-        </div>
-        </div>
+<div class="row py-1.5" style=" margin:10px;margin-top:20px" >
+  <!-- Default input -->
 
-    </form>
-            </div>
+  <!-- Default input -->
+  <div class="form-group  col ">
+    <div class="mr-4 pt-4">
+     <input class="ex1" id='intervention_type' name="intervention_type" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['intervention_type']}}"/>
+   </div>
+   <label for="intervention_type">Intervention type</label>
+ </div>
+
+ <div class="form-group col">
+  <div class="mr-4 pt-4">
+    <input class="ex1" id='phase' name="phase" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['phase']}}"/>
+  </div>
+  <label for="phase">Phase</label>
+</div>
+
+<div class="form-group col">
+  <div class="mr-4 pt-4">
+    <input class="ex1" id='int_obs' name="int_obs" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['int_obs']}}"/>
+  </div>
+  <label for="int_obs" class="label-extra-small">Intervention/Observation Model</label>
+</div>
+
+<div class="form-group col">
+  <div class="mr-4 pt-4">
+    <input class="ex1" id='location' name="location" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['location']}}"/>
+  </div>
+  <label for="location">Location</label>
+</div>
+
+<div class="form-group  col">
+  <div class="mr-4 pt-4">
+    <input class="ex1" id='allocation' name="allocation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['allocation']}}"/>
+  </div>
+  <label for="allocation">Allocation</label>
+</div>
+</div>
+
+<div class="row py-1.5 " style=" margin:10px;margin-top:20px;" >
+  <!-- Default input -->
+
+  <!-- Default input -->
+
+  <div class="form-group col pb-3" style=" align:'left'" >
+    <div class="mr-4 pt-4">
+      <input class="ex1" id='masking' name="masking" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['masking']}}" />
+    </div>
+    <label for="masking" >Masking</label>
+  </div>
+  <div class="form-group col">
+    <div class="mr-4 pt-4">
+      <input class="ex1" id='start_date' name="start_date" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['start_date']}}"/>
+    </div>
+    <label for="start_date">Start Period</label>
+  </div>
+
+  <div class="form-group col">
+    <div class="mr-4 pt-4">
+      <input class="ex1" id='eligibility_criteria' name="eligibility_criteria" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="{{feature_weights['eligibility_criteria']}}"/>
+    </div>
+    <label for="eligibility_criteria">Eligibility Criteria</label>
+  </div>
+
+  <div class="form-group col">
+    <div class="mr-4 pt-4">
+
+    </div>
+
+  </div>
+
+  <div class="form-group col">
+    <div class="mr-4 pt-4">
+
+    </div>
+
+  </div>
+</div>
+
+<div class="collapseHeader ui fluid" style=" text-align: center;border-radius:6px; padding:10px; "><span class="collapseSpan", style='background:#ededed; align: center;display: inline-block; height: 40px; line-height: 40px;width: 100% '><h7> <i>Rules Included in Eligibility Criteria (Click to Open)</i></h7></span></div>
 
 
-        <div id='myDiv' class="container-sm text-center"><!-- Plotly chart will be drawn inside this DIV --></div>
+<div class="collapseContent" style="display:none;">
 
-        <div class="row">
-        <div class="col-md-4 text-center" style="float:left;left:22%" > <h4>Location Map</h4></div>
-        <div class="col-md-4 text-center" style="float:left;left:12%" ><h4>Heat Map</h4></div>
+  <div class="row py-1.5 " style=" margin:10px;margin-top:20px; " >
+
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='gender' name="gender" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['gender']}}"/>
+      </div>
+      <label for="gender">Gender</label>
+    </div>
+    <div class="form-group  col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='age' name="age" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['age']}}"/>
+      </div>
+      <label for="age">Age</label>
+    </div>
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='healthy_volunteers' name="healthy_volunteers" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['healthy_volunteers']}}"/>
+      </div>
+      <label for="healthy_volunteers">Healthy Volunteers</label>
+    </div>
+
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='high_risk_status' name="high_risk_status" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['high_risk_status']}}"/>
+      </div>
+      <label for="high_risk_status">High Risk Status</label>
+    </div>
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='COVID_status' name="COVID_status" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['COVID_status']}}"/>
+      </div>
+      <label for="COVID_status">COVID-19 Status</label>
+    </div>
+  </div>
+
+  <div class="row py-1.5 " style=" margin:10px;margin-top:20px;" >
+
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='current_hosp_status' name="current_hosp_status" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['current_hosp_status']}}"/>
+      </div>
+      <label for="current_hosp_status">Current Hospitalization Status</label>
+    </div>
+    <div class="form-group  col">
+      <div class="mr-4 pt-4">
+        <input class="ex1" id='pregancy_status' name="pregancy_status" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="{{feature_weights['pregancy_status']}}"/>
+      </div>
+      <label for="pregancy_status">Pregancy Status</label>
+    </div>
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+
+      </div>
+
+    </div>
+
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+
+      </div>
+
+    </div>
+    <div class="form-group col">
+      <div class="mr-4 pt-4">
+
+      </div>
+
+    </div>
 
 
-        </div>
+  </div>
 
-        
+</div>
+</form>
 
-       
-        {{ marker_map_div }}
-        {{ heat_map_div }}
+</div>
+<div id='myDiv' class="container-sm text-center"><!-- Plotly chart will be drawn inside this DIV --></div>
 
-        <div class="container-xl pt-5" >
-            
-            <div class="table-responsive" >
-            <table class="table table-striped table-hover table-lg ">
-            <caption ></br></br><h4>Detailed Table</h4></caption>
-        <thead>
+<div class="row">
+	<div class="col-md-4 text-center" style="float:left;left:22%; font-size: 18px" > Location Map</div>
+    <div class="col-md-4 text-center" style="float:left;left:12%; font-size: 18px" >Heat Map</div>
+</div>
+
+{{ marker_map_div }}
+{{ heat_map_div }}
+
+<div class="container-xl pt-5">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-lg ">
+          <caption style="text-align: center;color:black;font-size: 18px"></br></br>Feature Values of the Similar Trial</br></br></caption>
+          <thead>
             <tr>
-            <th class="text-center">{{ step_score_highest[0][0] }}</th>
+                <th class="text-center">{{ step_score_highest[0][0] }}</th>
                 {% for i in step_score_highest[0][1:] %}
-                    <th class="text-center" scope="col"><a href="https://clinicaltrials.gov/ct2/show/{{ i }}" class="alert-link">{{ i }}</a></th>
+                <th class="text-center" scope="col"><a href="https://clinicaltrials.gov/ct2/show/{{ i }}" class="alert-link">{{ i }}</a></th>
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
-        {% for i in step_score_highest[1:] %}
-        <tr>
-            <th scope="row">{{ i[0] }}</th>
-            {% for j in i[1:] %}
+            {% for i in step_score_highest[1:] %}
+            <tr>
+                <th scope="row">{{ i[0] }}</th>
+                {% for j in i[1:] %}
                 <td>{{ j }}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
         </tbody>
 
-        </table>
-        </div>
-        </div>
-        </div>
+    </table>
 
-    <script type="text/javascript"> {{ marker_map_script }}</script>
-    <script type="text/javascript"> {{ heat_map_script }}</script>
-        <script>
+</div>
+</div>
 
-        var xi={{ id_list|tojson}};
-        var yi={{ score_list|tojson }};
-        var titles={{ title_list|tojson }}
-        var myPlot= document.getElementById('myDiv'),
-            d3=Plotly.d3,
-            data=[{x: xi, y: yi, type: 'bar', text: titles}],
-            layout={title: 'Collaboration Opportunities Recommendation for <a href="https://clinicaltrials.gov/ct2/show/{{ cur_id }}" class="alert-link">{{ cur_id }}'};
-        Plotly.newPlot('myDiv', data,layout);
-        </script>
-    {% endblock %}
+<script type="text/javascript"> {{ marker_map_script }}</script>
+<script type="text/javascript"> {{ heat_map_script }}</script>
+<script>
+    var xi={{ id_list|tojson}};
+    var yi={{ score_list|tojson }};
+    var titles={{ title_list|tojson }}
+    var myPlot= document.getElementById('myDiv'),
+    d3=Plotly.d3,
+    data=[{x: xi, y: yi, type: 'bar', text: titles}],
+   
+    layout={title: {text:' The top {{nctcnt}} Similar Trials for the Clinical Trial <a href="https://clinicaltrials.gov/ct2/show/{{ cur_id }}" class="alert-link" >{{ cur_id }}'},
+     font: {
+      size: 12
+    },
+     };
+    Plotly.newPlot('myDiv', data,layout);
+</script>
+{% endblock %}

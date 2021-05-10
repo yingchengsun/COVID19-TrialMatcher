@@ -3,7 +3,7 @@ import zipcodes
 from collections import defaultdict
 
 
-aact_trial=pd.read_csv('app/resources/aact_trial_info.csv')
+aact_trial=pd.read_csv('app/resources/matrix/all_info_1007_COVID_trials.csv')
 
 
 def extract_information(nct_list):

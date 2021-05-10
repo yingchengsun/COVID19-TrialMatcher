@@ -7,5 +7,3 @@
 $(".ex1").slider({
 	tooltip: 'always'
 });
-
-

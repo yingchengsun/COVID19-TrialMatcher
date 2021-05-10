@@ -1,0 +1,173 @@
+import pandas as pd
+import csv
+from sklearn.metrics.pairwise import cosine_similarity
+import pickle
+
+root='app/resources/'
+aact_trial=pd.read_csv(root+'aact_trial_web.csv')
+with open(root+'location.pickle','rb') as handle:
+    nct_zipcode_dict=pickle.load(handle)
+with open(root+'condition_names.pickle','rb') as handle:
+    condition_names_dict=pickle.load(handle)
+with open(root+'intervention_names.pickle','rb') as handle:
+    intervention_names_dict=pickle.load(handle)
+with open(root+'intervention_type.pickle','rb') as handle:
+    intervention_type_dict=pickle.load(handle)
+
+def find_max_zipcode_overlap_length(nct):
+    '''find the max zipcode overlap length for a certain nct_id
+    
+    Args:
+        nct: nct_id
+    Return:
+        max_length: the max overlap length
+    '''
+    max_length=0
+    for i in aact_trial.nct_id:        
+        if i!=nct:
+            max_length=max(max_length,len(nct_zipcode_dict[nct].intersection(nct_zipcode_dict[i])))
+    return max_length            
+
+
+def compute_normalized_zip_overlap_between_pairs(nct1,nct2,MAX_ZIP_LENGTH):
+    '''compute the normalized(overlap size divided by MAX_ZIP_LENGTH) zip overlap between two clinical trails
+    
+    Args:
+        nct1: nct_id of clinicla trial 1
+        nct2: nct_id of clinicla trial 2
+        MAX_ZIP_LENGTH: the max zip overlap length
+    Return:
+        normalized overlap score
+    '''
+     
+    return len(nct_zipcode_dict[nct1].intersection(nct_zipcode_dict[nct2]))/MAX_ZIP_LENGTH
+
+
+def find_zip_overlap_number(nct1,nct2):
+    return len(nct_zipcode_dict[nct1].intersection(nct_zipcode_dict[nct2]))
+
+def find_max_condition_names_overlap_length(nct):
+    '''find the max condition_names overlap length for a certain nct_id
+    
+    Args:
+        nct: nct_id
+    Return:
+        max_length: the max overlap length
+    '''
+    max_length=0
+    for i in aact_trial.nct_id:        
+        if i!=nct:
+            max_length=max(max_length,len(set(condition_names_dict[nct]).intersection(set(condition_names_dict[i]))))
+    return max_length  
+
+
+def compute_normalized_condition_names_overlap_between_pairs(nct1,nct2,MAX_LENGTH):
+    '''compute the normalized(overlap size divided by MAX_CONNAMES_LENGTH)condition names overlap between two clinical trails
+    
+    Args:
+        nct1: nct_id of clinicla trial 1
+        nct2: nct_id of clinicla trial 2
+        MAX_LENGTH: the max overlap length
+    Return:
+        normalized overlap score
+    '''
+    return len(set(condition_names_dict[nct1]).intersection(set(condition_names_dict[nct2])))/MAX_LENGTH
+
+def find_condition_names_overlap_number(nct1,nct2):
+    return len(set(condition_names_dict[nct1]).intersection(set(condition_names_dict[nct2])))
+
+
+def find_max_intervention_names_overlap_length(nct):
+    '''find the max intervention_names overlap length for a certain nct_id
+    
+    Args:
+        nct: nct_id
+    Return:
+        max_length: the max overlap length
+    '''
+    max_length=0
+    for i in aact_trial.nct_id:        
+        if i!=nct:
+            max_length=max(max_length,len(set(intervention_names_dict[nct]).intersection(set(intervention_names_dict[i]))))
+    return max_length 
+
+def compute_normalized_intervention_names_overlap_between_pairs(nct1,nct2,MAX_INTNAMES_LENGTH):
+    '''compute the normalized(overlap size divided by MAX_INTNAMES_LENGTH)intervention names overlap between two clinical trails
+    
+    Args:
+        nct1: nct_id of clinicla trial 1
+        nct2: nct_id of clinicla trial 2
+        MAX_INTNAMES_LENGTH: max overlap length
+    Return:
+        normalized overlap score
+    '''
+    return len(set(intervention_names_dict[nct1]).intersection(set(intervention_names_dict[nct2])))/MAX_INTNAMES_LENGTH
+
+def find_intervention_names_overlap_number(nct1,nct2):
+    return len(set(intervention_names_dict[nct1]).intersection(set(intervention_names_dict[nct2])))
+
+def find_max_intervention_type_overlap_length(nct):
+    '''find the max intervention_type overlap length for a certain nct_id
+    
+    Args:
+        nct: nct_id
+    Return:
+        max_length: the max overlap length
+    '''
+    max_length=0
+    for i in aact_trial.nct_id:        
+        if i!=nct:
+            max_length=max(max_length,len(set(intervention_type_dict[nct]).intersection(set(intervention_type_dict[i]))))
+    return max_length 
+
+def compute_normalized_intervention_type_overlap_between_pairs(nct1,nct2,MAX_LENGTH):
+    '''compute the normalized(overlap size divided by MAX_LENGTH)intervention type overlap between two clinical trails
+    
+    Args:
+        nct1: nct_id of clinicla trial 1
+        nct2: nct_id of clinicla trial 2
+        MAX_LENGTH: max overlap length
+    Return:
+        normalized overlap score
+    '''
+    return len(set(intervention_type_dict[nct1]).intersection(set(intervention_type_dict[nct2])))/MAX_LENGTH
+
+def find_intervention_type_overlap_number(nct1,nct2):
+    return len(set(intervention_type_dict[nct1]).intersection(set(intervention_type_dict[nct2])))
+
+def compute_outcome_measure_standardized_similarity(nct1,nct2,outcome_dict):
+    ''' compute the similarity score for outcome measure using BioBert between two nct_ids
+    
+    Args:
+        nct1: nct_id 1
+        nct2: nct_id 2
+    Return:
+        pairwise_similarity: similarity score for outcome measure using BioBert between nct_id1 and nct_id2
+        
+    '''
+    if nct1 not in outcome_dict or nct2 not in outcome_dict:
+        return 0
+    else:
+        s1_em = outcome_dict[nct1]
+        s2_em=outcome_dict[nct2]
+        pairwise_similarity=cosine_similarity(s1_em, s2_em)[0][0]
+        return pairwise_similarity
+
+def compute_single_feature_standardized_similarity(feature_name,nct1,nct2):
+    '''Compute the standardized overlap between two clinical trials for the specificed feature
+    
+    Args:
+        feature_name: the specified feature column 
+        nct1: nct_id of clinicla trial 1
+        nct2: nct_id of clinicla trial 2
+    Return:
+        0 - if they overlap
+        1 - if they don't overlap
+    '''
+    value1=aact_trial.loc[aact_trial['nct_id'] == nct1][feature_name].values[0]
+    value2=aact_trial.loc[aact_trial['nct_id'] == nct2][feature_name].values[0]
+    if pd.isnull(value1)==True or value1=='N/A' or value2=='N/A' or pd.isnull(value2)==True:
+        return 0
+    else:
+        return int(value1==value2)    
+        
