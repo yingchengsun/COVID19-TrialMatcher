@@ -9,9 +9,11 @@ An Interactive Interface for the Search of Clinical Trials Matching the Target T
     
 **Execute**: python3 run.py browse: http://127.0.0.1:5000/  
   
-**Index Page**: 
+**Index Page**:  
 <img src="/pictures/index.png" alt="drawing" width="600"/>
-
+  
+**Index Page**:  
+<img src="/pictures/result.png" alt="drawing" width="600"/>  
 
 # Versioning
 2.0
