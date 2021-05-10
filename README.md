@@ -10,7 +10,7 @@ An Interactive Interface for the Search of Clinical Trials Matching the Target T
 **Execute**: python3 run.py browse: http://127.0.0.1:5000/  
   
 **Index Page**: 
-![avatar](/home/picture/index)
+![index page](https://github.com/WengLab-InformaticsResearch/COVID19-TrialMatcher/edit/master/picture/index)
 
 # Versioning
 2.0
