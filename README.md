@@ -3,7 +3,7 @@ An Interactive Interface for the Search of Clinical Trials Matching the Target T
 Visit online: http://35.202.46.162:8000/    
 http://apex.dbmi.columbia.edu/trialmatcher (may not be available sometime for server maintenance)
     
-# Install and deploy
+## Install and deploy
 **Enviroment**: Python 3, Flask, Folium  
     
 **Setup**: Install the required libraries (you can install them manunally or run "pip install -r requirements.txt");  
