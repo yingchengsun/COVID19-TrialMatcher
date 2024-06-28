@@ -1,6 +1,6 @@
 # COVID19-TrialMatcher
 An Interactive Interface for the Search of Clinical Trials Matching the Target Trial    
-Visit the [demo](http://75.15.162.90:2163)   (may not be available sometime for server maintenance)
+[Demo](http://75.15.162.90:2163)   (may not be available sometime for server maintenance)
   
 ## Install and deploy
 **Enviroment**: Python 3, Flask, Folium  
