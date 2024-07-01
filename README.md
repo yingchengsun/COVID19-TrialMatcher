@@ -22,5 +22,5 @@ An Interactive Interface for the Search of Clinical Trials Matching the Target T
 2.0
     
 # Authors
-Yingcheng Sun (yingcheng.sun@columbia.edu), Jiaqi tang, Alex Butler, Chunhua Weng 
+Yingcheng Sun (yingchengsun@gmail.com), Jiaqi tang, Alex Butler, Chunhua Weng 
 
